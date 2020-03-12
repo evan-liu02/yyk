@@ -1,11 +1,9 @@
 package com.anju.yyk.client.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -18,6 +16,7 @@ import com.anju.yyk.client.R;
 import com.anju.yyk.client.data.LoginRsp;
 import com.anju.yyk.client.http.RetrofitHelper;
 import com.anju.yyk.client.util.AppHelper;
+import com.anju.yyk.client.util.SPUtils;
 import com.anju.yyk.client.view.LoadingDialog;
 
 import io.reactivex.Observer;
@@ -28,7 +27,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private EditText passwordEt;
     private CheckBox rememberCb;
     private boolean isRememberPwd;
-    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,7 +34,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         setContentView(R.layout.activity_login);
         statusInScreen(this);
         initViews();
-        sharedPreferences = getSharedPreferences("yyk_sp", MODE_PRIVATE);
         autoLogin();
     }
 
@@ -55,41 +52,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void autoLogin() {
-        boolean rememberPwd = isRememberPwd();
+        boolean rememberPwd = SPUtils.getBoolean("isRememberPwd");
         if (rememberPwd) {
-            String username = getUsername();
-            String password = getPassword();
+            String username = SPUtils.getString("username");
+            String password = SPUtils.getString("password");
             usernameEt.setText(username);
             usernameEt.setSelection(username.length());
             passwordEt.setText(password);
             rememberCb.setChecked(true);
             login(username, password);
         }
-    }
-
-    public void saveIsRememberPwd(boolean isRememberPwd) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean("isRememberPwd", isRememberPwd);
-        editor.apply();
-    }
-
-    public void saveInfo(String username, String password) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("username", username);
-        editor.putString("password", password);
-        editor.apply();
-    }
-
-    public String getUsername() {
-        return sharedPreferences.getString("username", null);
-    }
-
-    public String getPassword() {
-        return sharedPreferences.getString("password", null);
-    }
-
-    public boolean isRememberPwd() {
-        return sharedPreferences.getBoolean("isRememberPwd", false);
     }
 
     @Override
@@ -143,8 +115,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 dialog.dismiss();
                 if (status == 0) {
                     if (isRememberPwd) {
-                        saveIsRememberPwd(true);
-                        saveInfo(username, password);
+                        SPUtils.putBoolean("isRememberPwd", true);
+                        SPUtils.putString("username", username);
+                        SPUtils.putString("password", password);
                     }
                     if (loginRsp.getData() != null) {
                         AppHelper.userId = loginRsp.getData().getUser_id();
