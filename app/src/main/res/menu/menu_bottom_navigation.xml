@@ -2,21 +2,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/friends"
+        android:id="@+id/home"
         android:enabled="true"
         android:icon="@mipmap/ic_home"
         android:title="主页"
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/trend"
+        android:id="@+id/attention"
         android:enabled="true"
         android:icon="@mipmap/ic_attention"
         android:title="关注"
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/mine"
+        android:id="@+id/logout"
         android:enabled="true"
         android:icon="@mipmap/ic_quit"
         android:title="退出"

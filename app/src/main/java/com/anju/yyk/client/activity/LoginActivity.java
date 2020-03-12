@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import com.anju.yyk.client.R;
 import com.anju.yyk.client.data.LoginRsp;
 import com.anju.yyk.client.http.RetrofitHelper;
+import com.anju.yyk.client.util.AppHelper;
 import com.anju.yyk.client.view.LoadingDialog;
 
 import io.reactivex.Observer;
@@ -144,6 +145,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     if (isRememberPwd) {
                         saveIsRememberPwd(true);
                         saveInfo(username, password);
+                    }
+                    if (loginRsp.getData() != null) {
+                        AppHelper.userId = loginRsp.getData().getUser_id();
                     }
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);

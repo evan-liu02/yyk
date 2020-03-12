@@ -3,6 +3,7 @@ package com.anju.yyk.client.data;
 public class LoginRsp {
     private int status;
     private String msg;
+    private LoginData data;
 
     public LoginRsp() {
     }
@@ -23,11 +24,20 @@ public class LoginRsp {
         this.msg = msg;
     }
 
+    public LoginData getData() {
+        return data;
+    }
+
+    public void setData(LoginData data) {
+        this.data = data;
+    }
+
     @Override
     public String toString() {
         return "LoginRsp{" +
                 "status=" + status +
                 ", msg='" + msg + '\'' +
+                ", data=" + data +
                 '}';
     }
 
