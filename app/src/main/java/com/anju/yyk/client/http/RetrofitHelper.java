@@ -1,18 +1,27 @@
 package com.anju.yyk.client.http;
 
+import android.util.Log;
+
 import com.anju.yyk.client.BuildConfig;
+import com.anju.yyk.client.data.CheckingRecordRsp;
 import com.anju.yyk.client.data.ElderInfoRsp;
 import com.anju.yyk.client.data.FeedbackRsp;
 import com.anju.yyk.client.data.LoginRsp;
+import com.anju.yyk.client.data.NoticeDetailRsp;
 import com.anju.yyk.client.data.NoticeRsp;
 import com.anju.yyk.client.data.PasswordRsp;
+import com.anju.yyk.client.data.NursingRecordRsp;
 import com.anju.yyk.client.data.TipsRsp;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
+import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -26,6 +35,9 @@ public class RetrofitHelper {
     private static final String ACTION_FEEDBACK = "yijian_add";
     private static final String ACTION_PASSWORD = "mima_update";
     private static final String ACTION_RULES = "guanliguiding";
+    private static final String ACTION_RULE_DETAIL = "gt_show";
+    private static final String ACTION_NURSING_RECORD = "hulijilu";
+    private static final String ACTION_CHECKING_RECORDS = "chafangjilu";
 
     private static RetrofitHelper self;
     private ApiService apiService;
@@ -110,5 +122,38 @@ public class RetrofitHelper {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
+    }
+
+    public void getNursingRecord(Observer<NursingRecordRsp> observer, String id, String time) {
+        apiService.getNursingRecord(ACTION_NURSING_RECORD, id, time)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public void getCheckingRecords(Observer<CheckingRecordRsp> observer, String id, String time) {
+        apiService.getCheckingRecords(ACTION_CHECKING_RECORDS, id, time)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public void getRuleDetail(Observer<NoticeDetailRsp> observer, String channelId, String id) {
+        Call<ResponseBody> call = apiService.getRuleDetail(ACTION_RULE_DETAIL, channelId, id);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    Log.e("yyk", response.body().string());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
     }
 }

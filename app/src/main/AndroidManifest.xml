@@ -34,6 +34,12 @@
         <activity
             android:name=".activity.RulesActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.RuleDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.NursingRecordActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

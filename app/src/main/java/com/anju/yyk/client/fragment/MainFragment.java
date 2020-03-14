@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.anju.yyk.client.R;
 import com.anju.yyk.client.activity.FeedbackActivity;
 import com.anju.yyk.client.activity.MainActivity;
+import com.anju.yyk.client.activity.NursingRecordActivity;
 import com.anju.yyk.client.activity.PasswordActivity;
 import com.anju.yyk.client.activity.RulesActivity;
 import com.anju.yyk.client.adapter.MainAdapter;
@@ -127,6 +128,7 @@ public class MainFragment extends BaseFragment implements MainAdapter.OnItemClic
                     List<ElderInfoRsp.ElderData> data = elderInfoRsp.getData();
                     if (data != null && data.size() > 0) {
                         name.setText(data.get(0).getName());
+                        AppHelper.id = data.get(0).getId();
                         infoLayout.setVisibility(View.VISIBLE);
                     }
                 }
@@ -235,6 +237,14 @@ public class MainFragment extends BaseFragment implements MainAdapter.OnItemClic
     @Override
     public void OnItemClicked(int position) {
         switch (position) {
+            case 0:
+            case 1:
+            case 2:
+                Intent normalIntent = new Intent(context, NursingRecordActivity.class);
+                normalIntent.putExtra("position", position);
+                normalIntent.putExtra("name", name.getText().toString());
+                startActivity(normalIntent);
+                break;
             case 3:
                 Intent rulesIntent = new Intent(context, RulesActivity.class);
                 startActivity(rulesIntent);
@@ -256,9 +266,9 @@ public class MainFragment extends BaseFragment implements MainAdapter.OnItemClic
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == 100) {
-                ((MainActivity)context).showToast("意见反馈成功！");
+                ((MainActivity) context).showToast("意见反馈成功！");
             } else if (requestCode == 101) {
-                ((MainActivity)context).showToast("密码修改成功！");
+                ((MainActivity) context).showToast("密码修改成功！");
             }
         }
     }

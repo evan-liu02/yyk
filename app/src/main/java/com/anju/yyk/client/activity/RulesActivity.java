@@ -1,5 +1,6 @@
 package com.anju.yyk.client.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -87,6 +88,10 @@ public class RulesActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void OnItemClicked(int position) {
-
+        if (rulesList != null && position < rulesList.size()) {
+            Intent intent = new Intent(this, RuleDetailActivity.class);
+            intent.putExtra("id", rulesList.get(position).getId());
+            startActivity(intent);
+        }
     }
 }
