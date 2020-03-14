@@ -34,6 +34,10 @@ public class SPUtils {
         return sp.getBoolean(key, defaultValue);
     }
 
+    public static void remove(String key) {
+        sp.edit().remove(key).apply();
+    }
+
     public static void clear() {
         sp.edit().clear().apply();
     }

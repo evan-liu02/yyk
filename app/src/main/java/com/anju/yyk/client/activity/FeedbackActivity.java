@@ -66,14 +66,15 @@ public class FeedbackActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onNext(FeedbackRsp feedbackRsp) {
                 if (feedbackRsp.getStatus() == 0) {
-                    showToast("意见反馈成功！");
+//                    showToast("意见反馈成功！");
+                    setResult(RESULT_OK);
+                    finish();
                 }
-
             }
 
             @Override
             public void onError(Throwable e) {
-
+                showToast("提交失败，请重试！");
             }
 
             @Override

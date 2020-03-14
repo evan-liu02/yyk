@@ -1,5 +1,6 @@
 package com.anju.yyk.client.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,6 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.anju.yyk.client.R;
 import com.anju.yyk.client.activity.FeedbackActivity;
+import com.anju.yyk.client.activity.MainActivity;
+import com.anju.yyk.client.activity.PasswordActivity;
+import com.anju.yyk.client.activity.RulesActivity;
 import com.anju.yyk.client.adapter.MainAdapter;
 import com.anju.yyk.client.data.ElderInfoRsp;
 import com.anju.yyk.client.data.MenuData;
@@ -231,12 +235,31 @@ public class MainFragment extends BaseFragment implements MainAdapter.OnItemClic
     @Override
     public void OnItemClicked(int position) {
         switch (position) {
+            case 3:
+                Intent rulesIntent = new Intent(context, RulesActivity.class);
+                startActivity(rulesIntent);
+                break;
             case 4:
                 Intent intent = new Intent(context, FeedbackActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, 100);
+                break;
+            case 5:
+                Intent passwordIntent = new Intent(context, PasswordActivity.class);
+                startActivityForResult(passwordIntent, 101);
                 break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == 100) {
+                ((MainActivity)context).showToast("意见反馈成功！");
+            } else if (requestCode == 101) {
+                ((MainActivity)context).showToast("密码修改成功！");
+            }
         }
     }
 }

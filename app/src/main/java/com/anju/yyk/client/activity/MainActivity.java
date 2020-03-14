@@ -80,7 +80,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         switch (item.getItemId()) {
             case R.id.logout:
                 logout();
-                return true;
+                return false;
             case R.id.home:
                 changeFrag(FRAGMENTS[0]);
                 return true;
