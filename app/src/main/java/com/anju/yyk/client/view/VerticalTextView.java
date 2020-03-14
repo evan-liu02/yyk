@@ -97,10 +97,11 @@ public class VerticalTextView extends TextSwitcher implements ViewSwitcher.ViewF
     public View makeView() {
         TextView textView = new TextView(mContext);
         textView.setGravity(Gravity.START);
-        textView.setTextSize(15);
+        textView.setTextSize(14);
         textView.setSingleLine(true);
+        textView.setLines(1);
         textView.setEllipsize(TextUtils.TruncateAt.END);
-        textView.setTextColor(Color.parseColor("#555"));
+        textView.setTextColor(Color.BLACK);
         textView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {

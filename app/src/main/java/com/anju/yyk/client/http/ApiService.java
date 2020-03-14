@@ -1,6 +1,7 @@
 package com.anju.yyk.client.http;
 
 import com.anju.yyk.client.data.ElderInfoRsp;
+import com.anju.yyk.client.data.FeedbackRsp;
 import com.anju.yyk.client.data.LoginRsp;
 import com.anju.yyk.client.data.NoticeRsp;
 import com.anju.yyk.client.data.TipsRsp;
@@ -24,4 +25,7 @@ public interface ApiService {
 
     @POST(PATH)
     Observable<TipsRsp> getTips(@Query("action") String action, @Query("id") String id);
+
+    @POST(PATH)
+    Observable<FeedbackRsp> feedback(@Query("action") String action, @Query("content") String content, @Query("jiashu_id") String id);
 }

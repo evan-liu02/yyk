@@ -1,8 +1,11 @@
 package com.anju.yyk.client.data;
 
+import java.util.List;
+
 public class ElderInfoRsp {
     private int status;
     private String msg;
+    private List<ElderData> data;
 
     public ElderInfoRsp() {
     }
@@ -23,11 +26,20 @@ public class ElderInfoRsp {
         this.msg = msg;
     }
 
+    public List<ElderData> getData() {
+        return data;
+    }
+
+    public void setData(List<ElderData> data) {
+        this.data = data;
+    }
+
     @Override
     public String toString() {
         return "ElderInfoRsp{" +
                 "status=" + status +
                 ", msg='" + msg + '\'' +
+                ", data=" + data +
                 '}';
     }
 

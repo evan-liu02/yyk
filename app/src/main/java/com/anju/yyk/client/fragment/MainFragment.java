@@ -1,9 +1,12 @@
 package com.anju.yyk.client.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,6 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.anju.yyk.client.R;
+import com.anju.yyk.client.activity.FeedbackActivity;
 import com.anju.yyk.client.adapter.MainAdapter;
 import com.anju.yyk.client.data.ElderInfoRsp;
 import com.anju.yyk.client.data.MenuData;
@@ -18,17 +22,24 @@ import com.anju.yyk.client.data.NoticeRsp;
 import com.anju.yyk.client.data.TipsRsp;
 import com.anju.yyk.client.http.RetrofitHelper;
 import com.anju.yyk.client.util.AppHelper;
+import com.anju.yyk.client.view.VerticalTextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
-public class MainFragment extends BaseFragment {
+public class MainFragment extends BaseFragment implements MainAdapter.OnItemClickListener {
 
     private RetrofitHelper retrofitHelper;
     private List<MenuData> menuList = new ArrayList<MenuData>();
+
+    private LinearLayout infoLayout;
+    private TextView name;
+    private VerticalTextView notice;
+    private VerticalTextView tips;
 
     @Nullable
     @Override
@@ -37,8 +48,13 @@ public class MainFragment extends BaseFragment {
         initMenu();
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        infoLayout = rootView.findViewById(R.id.info_layout);
+        name = rootView.findViewById(R.id.name);
+        notice = rootView.findViewById(R.id.notice);
+        tips = rootView.findViewById(R.id.tips);
         RecyclerView menuRv = rootView.findViewById(R.id.menu_rv);
         MainAdapter menuAdapter = new MainAdapter(context, menuList, R.layout.layout_main_item);
+        menuAdapter.setItemClickListener(this);
         menuRv.setLayoutManager(new GridLayoutManager(context, 3));
         menuRv.setAdapter(menuAdapter);
 
@@ -104,7 +120,11 @@ public class MainFragment extends BaseFragment {
             public void onNext(ElderInfoRsp elderInfoRsp) {
                 int status = elderInfoRsp.getStatus();
                 if (status == 0) {
-
+                    List<ElderInfoRsp.ElderData> data = elderInfoRsp.getData();
+                    if (data != null && data.size() > 0) {
+                        name.setText(data.get(0).getName());
+                        infoLayout.setVisibility(View.VISIBLE);
+                    }
                 }
             }
 
@@ -132,7 +152,18 @@ public class MainFragment extends BaseFragment {
 
             @Override
             public void onNext(NoticeRsp noticeRsp) {
-
+                if (noticeRsp.getStatus() == 0) {
+                    List<NoticeRsp.NoticeData> data = noticeRsp.getData();
+                    if (data != null && data.size() > 0) {
+                        List<String> noticeList = new ArrayList<String>();
+                        for (NoticeRsp.NoticeData notice : data) {
+                            noticeList.add(notice.getTitle());
+                        }
+                        notice.setTextList(noticeList);
+                    } else {
+                        notice.setTextList(Arrays.asList("暂无通知"));
+                    }
+                }
             }
 
             @Override
@@ -159,7 +190,18 @@ public class MainFragment extends BaseFragment {
 
             @Override
             public void onNext(TipsRsp tipsRsp) {
-
+                if (tipsRsp.getStatus() == 0) {
+                    List<TipsRsp.TipsData> data = tipsRsp.getData();
+                    if (data != null && data.size() > 0) {
+                        List<String> tipsList = new ArrayList<String>();
+                        for (TipsRsp.TipsData tips : data) {
+                            tipsList.add(tips.getTitle());
+                        }
+                        tips.setTextList(tipsList);
+                    } else {
+                        tips.setTextList(Arrays.asList("暂无提醒"));
+                    }
+                }
             }
 
             @Override
@@ -172,5 +214,29 @@ public class MainFragment extends BaseFragment {
 
             }
         }, AppHelper.userId);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        notice.stopFlipping();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        notice.startFlipping();
+    }
+
+    @Override
+    public void OnItemClicked(int position) {
+        switch (position) {
+            case 4:
+                Intent intent = new Intent(context, FeedbackActivity.class);
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
     }
 }

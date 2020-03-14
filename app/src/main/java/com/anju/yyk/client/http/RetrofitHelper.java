@@ -2,6 +2,7 @@ package com.anju.yyk.client.http;
 
 import com.anju.yyk.client.BuildConfig;
 import com.anju.yyk.client.data.ElderInfoRsp;
+import com.anju.yyk.client.data.FeedbackRsp;
 import com.anju.yyk.client.data.LoginRsp;
 import com.anju.yyk.client.data.NoticeRsp;
 import com.anju.yyk.client.data.TipsRsp;
@@ -21,6 +22,7 @@ public class RetrofitHelper {
     private static final String ACTION_INFO = "laoren_list";
     private static final String ACTION_NOTICE = "tongzhi";
     private static final String ACTION_TIPS = "tixing";
+    private static final String ACTION_FEEDBACK = "yijian_add";
 
     private static RetrofitHelper self;
     private ApiService apiService;
@@ -81,6 +83,13 @@ public class RetrofitHelper {
 
     public void getTips(Observer<TipsRsp> observer, String id) {
         apiService.getTips(ACTION_TIPS, id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public void feedback(Observer<FeedbackRsp> observer, String content, String id) {
+        apiService.feedback(ACTION_FEEDBACK, content, id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);

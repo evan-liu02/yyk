@@ -1,9 +1,11 @@
 package com.anju.yyk.client.data;
 
+import java.util.List;
+
 public class NoticeRsp {
     private int status;
     private String msg;
-    private NoticeData data;
+    private List<NoticeData> data;
 
     public NoticeRsp() {
     }
@@ -24,11 +26,11 @@ public class NoticeRsp {
         this.msg = msg;
     }
 
-    public NoticeData getData() {
+    public List<NoticeData> getData() {
         return data;
     }
 
-    public void setData(NoticeData data) {
+    public void setData(List<NoticeData> data) {
         this.data = data;
     }
 

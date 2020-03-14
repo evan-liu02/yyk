@@ -1,5 +1,8 @@
 package com.anju.yyk.client.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -11,6 +14,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.anju.yyk.client.R;
 import com.anju.yyk.client.fragment.BaseFragment;
 import com.anju.yyk.client.fragment.MainFragment;
+import com.anju.yyk.client.util.SPUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
@@ -75,11 +79,30 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.logout:
+                logout();
                 return true;
             case R.id.home:
                 changeFrag(FRAGMENTS[0]);
                 return true;
         }
         return false;
+    }
+
+    private void logout() {
+        new AlertDialog.Builder(this).setMessage("确定要退出当前账号？").setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                SPUtils.clear();
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).create().show();
     }
 }

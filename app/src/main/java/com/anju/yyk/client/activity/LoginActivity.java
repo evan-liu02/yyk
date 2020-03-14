@@ -55,9 +55,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         boolean rememberPwd = SPUtils.getBoolean("isRememberPwd");
         if (rememberPwd) {
             String username = SPUtils.getString("username");
-            String password = SPUtils.getString("password");
+            if (TextUtils.isEmpty(username)) {
+                return;
+            }
             usernameEt.setText(username);
             usernameEt.setSelection(username.length());
+            String password = SPUtils.getString("password");
+            if (TextUtils.isEmpty(password)) {
+                return;
+            }
             passwordEt.setText(password);
             rememberCb.setChecked(true);
             login(username, password);
