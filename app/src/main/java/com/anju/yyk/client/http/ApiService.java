@@ -1,5 +1,6 @@
 package com.anju.yyk.client.http;
 
+import com.anju.yyk.client.data.BillsRsp;
 import com.anju.yyk.client.data.CheckingRecordRsp;
 import com.anju.yyk.client.data.ElderInfoRsp;
 import com.anju.yyk.client.data.FeedbackRsp;
@@ -49,4 +50,7 @@ public interface ApiService {
 
     @POST(PATH)
     Observable<CheckingRecordRsp> getCheckingRecords(@Query("action") String action, @Query("laoren_id") String id, @Query("time") String time);
+
+    @POST(PATH)
+    Observable<BillsRsp> getBillsRecord(@Query("action") String action, @Query("laoren_id") String id, @Query("time") String time);
 }

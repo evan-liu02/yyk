@@ -15,8 +15,10 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.anju.yyk.client.R;
+import com.anju.yyk.client.activity.BillsRecordActivity;
 import com.anju.yyk.client.activity.FeedbackActivity;
 import com.anju.yyk.client.activity.MainActivity;
+import com.anju.yyk.client.activity.NoticeActivity;
 import com.anju.yyk.client.activity.NursingRecordActivity;
 import com.anju.yyk.client.activity.PasswordActivity;
 import com.anju.yyk.client.activity.RulesActivity;
@@ -36,12 +38,14 @@ import java.util.List;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
-public class MainFragment extends BaseFragment implements MainAdapter.OnItemClickListener {
+public class MainFragment extends BaseFragment implements MainAdapter.OnItemClickListener, View.OnClickListener {
 
     private RetrofitHelper retrofitHelper;
     private List<MenuData> menuList = new ArrayList<MenuData>();
+    private ArrayList<NoticeRsp.NoticeData> noticeList = new ArrayList<NoticeRsp.NoticeData>();
 
     private LinearLayout infoLayout;
+    private LinearLayout noticeMoreLayout;
     private TextView name;
     private VerticalTextView notice;
     private VerticalTextView tips;
@@ -54,6 +58,8 @@ public class MainFragment extends BaseFragment implements MainAdapter.OnItemClic
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         infoLayout = rootView.findViewById(R.id.info_layout);
+        noticeMoreLayout = rootView.findViewById(R.id.notice_more_layout);
+        noticeMoreLayout.setOnClickListener(this);
         name = rootView.findViewById(R.id.name);
         notice = rootView.findViewById(R.id.notice);
         tips = rootView.findViewById(R.id.tips);
@@ -161,6 +167,7 @@ public class MainFragment extends BaseFragment implements MainAdapter.OnItemClic
                 if (noticeRsp.getStatus() == 0) {
                     List<NoticeRsp.NoticeData> data = noticeRsp.getData();
                     if (data != null && data.size() > 0) {
+                        noticeList.addAll(data);
                         List<String> noticeList = new ArrayList<String>();
                         for (NoticeRsp.NoticeData notice : data) {
                             noticeList.add(notice.getTitle());
@@ -239,11 +246,14 @@ public class MainFragment extends BaseFragment implements MainAdapter.OnItemClic
         switch (position) {
             case 0:
             case 1:
-            case 2:
                 Intent normalIntent = new Intent(context, NursingRecordActivity.class);
-                normalIntent.putExtra("position", position);
                 normalIntent.putExtra("name", name.getText().toString());
                 startActivity(normalIntent);
+                break;
+            case 2:
+                Intent billsIntent = new Intent(context, BillsRecordActivity.class);
+                billsIntent.putExtra("name", name.getText().toString());
+                startActivity(billsIntent);
                 break;
             case 3:
                 Intent rulesIntent = new Intent(context, RulesActivity.class);
@@ -270,6 +280,21 @@ public class MainFragment extends BaseFragment implements MainAdapter.OnItemClic
             } else if (requestCode == 101) {
                 ((MainActivity) context).showToast("密码修改成功！");
             }
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.notice_more_layout:
+                Intent intent = new Intent(context, NoticeActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList("notice", noticeList);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                break;
+            default:
+                break;
         }
     }
 }

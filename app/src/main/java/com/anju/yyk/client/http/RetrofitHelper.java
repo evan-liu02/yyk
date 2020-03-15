@@ -3,6 +3,7 @@ package com.anju.yyk.client.http;
 import android.util.Log;
 
 import com.anju.yyk.client.BuildConfig;
+import com.anju.yyk.client.data.BillsRsp;
 import com.anju.yyk.client.data.CheckingRecordRsp;
 import com.anju.yyk.client.data.ElderInfoRsp;
 import com.anju.yyk.client.data.FeedbackRsp;
@@ -38,6 +39,7 @@ public class RetrofitHelper {
     private static final String ACTION_RULE_DETAIL = "gt_show";
     private static final String ACTION_NURSING_RECORD = "hulijilu";
     private static final String ACTION_CHECKING_RECORDS = "chafangjilu";
+    private static final String ACTION_BILLS_RECORD = "zhangdanjilu";
 
     private static RetrofitHelper self;
     private ApiService apiService;
@@ -133,6 +135,13 @@ public class RetrofitHelper {
 
     public void getCheckingRecords(Observer<CheckingRecordRsp> observer, String id, String time) {
         apiService.getCheckingRecords(ACTION_CHECKING_RECORDS, id, time)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public void getBillsRecord(Observer<BillsRsp> observer, String id, String time) {
+        apiService.getBillsRecord(ACTION_BILLS_RECORD, id, time)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);

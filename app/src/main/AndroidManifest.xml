@@ -40,6 +40,12 @@
         <activity
             android:name=".activity.NursingRecordActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.BillsRecordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.NoticeActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
